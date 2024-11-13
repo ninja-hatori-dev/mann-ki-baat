@@ -31,6 +31,10 @@ blogRouter.use('/*',async (c, next) => {
 	await next()
 });
 
+
+
+
+
 blogRouter.post('/add', async (c) => {
 	const userId = c.get('userId');
 	const prisma = new PrismaClient({
@@ -102,8 +106,14 @@ blogRouter.get('/bulk', async (c) => {
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());
+	const excludedId = c.get('userId');
 	
 	const post = await prisma.post.findMany({
+		where: {
+            authorId: excludedId ? {
+               not: excludedId, 
+            } : undefined,
+         },
 		select:{
 			content: true,
 			title: true,
@@ -111,7 +121,7 @@ blogRouter.get('/bulk', async (c) => {
 			authorId: true,
 			author: {
 			   select:{
-				name: true
+			   name: true
 			
 			}
 		}
@@ -141,6 +151,7 @@ blogRouter.get('/:id', async (c) => {
             id:true,
             title:true,
             content:true,
+			authorId: true,
             author:{
                 select:{
                     name:true
@@ -151,3 +162,69 @@ blogRouter.get('/:id', async (c) => {
 
 	return c.json(post);
 })
+
+
+blogRouter.delete("/:id", async (c) => {
+	const id = c.req.param("id");
+              
+	const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL,
+	}).$extends(withAccelerate());
+
+	try {
+		
+		const res = await prisma.post.delete({
+			where: {
+				id: id,
+				authorId: c.get("userId")
+			},
+		});
+		console.log(c.get("userId"));
+		console.log(res);
+		
+		return c.json({
+			message: "Post deleted successfully",
+			
+		});
+	} catch (error) {
+		console.log("Error: ", error);
+		c.status(403);
+		return c.json({
+			message: "error",
+		});
+	}
+});
+
+blogRouter.get("/myaccount/:authorId", async(c)=>{
+
+	const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL,
+	}).$extends(withAccelerate());
+       
+	try{ const authorId = c.req.param('authorId');
+
+		// Fetch all posts for the specified authorId
+		const posts = await prisma.post.findMany({
+		   where: {
+			  authorId: authorId, // Filter posts by authorId
+		   },
+		   select: {
+			  content: true,
+			  title: true,
+			  id: true,
+			  authorId: true,
+			  author: {
+				 select: {
+					name: true,
+				 },
+			  },
+		   },
+		});
+  
+		// Return the posts as a JSON response
+		return c.json(posts);
+	 } catch (e) {
+		console.error(e);
+		return c.json({ error: 'Something went wrong' }, 500);
+	 }
+  });

@@ -94,3 +94,33 @@ export function useUserDetails(token: any): any {
     console.log(jsonPayload);
 	return JSON.parse(jsonPayload);
 }
+
+export const useMyblogs = () =>{
+    const [blogs, setBlogs] = useState();
+    const [ loading, setLoading] = useState(true);
+    const token = localStorage.getItem("token");
+    const data = useUserDetails(token);
+
+
+    useEffect(()=>{
+        axios.get(`${BACKEND_URL}/api/v1/blog/myaccount/${data.id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1")}`,
+                },
+            })
+            .then((response) => {
+                setBlogs(response.data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching user's blogs:", error);
+                alert("Error fetching blogs. Please check the console for more details.");
+                setLoading(false);
+            });
+    }, []);
+
+    return {
+        loading,
+        blogs,
+    };
+};
