@@ -5,6 +5,7 @@ import { Signin } from './pages/Signin'
 import { Blog } from './pages/Blog'
 import { Blogs } from './pages/Blogs'
 import { Publish } from './pages/Publish'
+import { AuthMiddleware } from './components/AuthMiddleware'
 
 function App() {
   
@@ -15,12 +16,13 @@ function App() {
        <Routes>
           <Route path ="/signup" element ={<Signup/>}></Route>
           <Route path ="/signin" element ={<Signin/>}></Route>
+          <Route element={<AuthMiddleware/>}>
+
           <Route path ="/blog/:id" element ={<Blog/>}></Route>
           <Route path ="/blogs" element ={<Blogs/>}></Route>
           <Route path ="/publish" element ={<Publish/>}></Route>
-
-
-
+          </Route>
+          
        </Routes>
     </BrowserRouter>
      

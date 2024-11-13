@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 
+
+
 export interface Blog {
     content: string;
     title: string;
@@ -10,7 +12,7 @@ export interface Blog {
         name: string;
     }
 }
-
+ 
 
 export const useBlog = ( {id}: {id: string})=>{
 
@@ -73,4 +75,22 @@ export const useBlogs = () => {
         loading,
         blogs
     };
+
+   
 };
+
+export function useUserDetails(token: any): any {
+	var base64Url = token.split(".")[1];
+	var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+	var jsonPayload = decodeURIComponent(
+		window
+			.atob(base64)
+			.split("")
+			.map(function (c) {
+				return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+			})
+			.join("")
+	);
+    console.log(jsonPayload);
+	return JSON.parse(jsonPayload);
+}

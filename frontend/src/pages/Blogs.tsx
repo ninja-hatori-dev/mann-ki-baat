@@ -25,7 +25,8 @@ export const Blogs = () =>{
             <div className="w-[60vw] cursor-pointer">
                     {blogs.map( blog => 
                         <Blogcard
-                            id={blog.id}
+                        id={blog.id}
+                       
                         authorName={blog.author.name || "Anonymous"}
                         title={blog.title}
                         content={blog.content}

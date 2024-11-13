@@ -74,12 +74,14 @@ blogRouter.put('/up', async (c) => {
 	const body = await c.req.json();
 
     const { success } = updateBlogInput.safeParse(body);
+
     if(! success){
         c.status(411);
         return c.json({
             message : "input syntax is incorrect"
         })
     }
+
 	prisma.post.update({
 		where: {
 			id: body.id,
@@ -106,6 +108,7 @@ blogRouter.get('/bulk', async (c) => {
 			content: true,
 			title: true,
 			id: true, 
+			authorId: true,
 			author: {
 			   select:{
 				name: true
@@ -125,7 +128,7 @@ blogRouter.get('/bulk', async (c) => {
 
 blogRouter.get('/:id', async (c) => {
 	const id = c.req.param('id');
-	 
+	 // 
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());

@@ -31,31 +31,19 @@ userRouter.post('/signup', async (c) => {
     const body: SignupBody = await c.req.json();
     
     console.log("Request body:", body);
-    const result = signupInput.safeParse(body);  // Rename to result for clarity
+    const result = signupInput.safeParse(body);  
     if (!result.success) {
-      result.error.issues.forEach((issue) => {
-          if (issue.code === "invalid_type") {
-              console.error(
-                  `Validation issue at ${issue.path.join('.')} - expected: ${issue.expected}, received: ${issue.received}. Message: ${issue.message}`
-              );
-          } else {
-              // Handle other issue types
-              console.error(
-                  `Validation issue at ${issue.path.join('.')} - ${issue.message}`
-              );
-          }
-      });
-     
+         
       c.status(411);
       return c.json({
-          message: "Input validation failed",
-          errors: result.error.issues,
+          message: "Input syntax error",
+          
       });
   }
   
     try {
 
-        const hashedPassword = await bcrypt.hash(body.password, 10);
+      const hashedPassword = await bcrypt.hash(body.password, 10);
 
       const user = await prisma.user.create({
         data: {
@@ -66,7 +54,7 @@ userRouter.post('/signup', async (c) => {
       });
       
       
-      const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+      const token = await sign({ id: user.id , name: user.name}, c.env.JWT_SECRET);
   
       return c.json({
         jwt: token
@@ -98,18 +86,32 @@ userRouter.post('/signup', async (c) => {
         })
     }
 
+
+
     const user = await prisma.user.findUnique({
         where: {
-            email: body.email,
-            password: body.password
-        }
+            email: body.email           
+          }
     });
-
+    
     if (!user) {
-        c.status(403);
-        return c.json({ error: "user not found" });
-    }
+      c.status(403);
+      return c.json({ error: "user not found or incorrect email" });
+  }
+
+   const dbpass = user?.password;
+   const ismatch = await bcrypt.compare( body.password,dbpass)
+  if (!ismatch ){
+    return c.json({
+     error: "incorrect password"
+    })
+  }
+    
+   
+
+    
 
     const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
     return c.json({ jwt });
 })
+

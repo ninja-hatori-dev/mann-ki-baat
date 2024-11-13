@@ -3,13 +3,15 @@ import { useState } from "react";
 import { Link , useNavigate} from "react-router-dom"
 import { ChangeEvent } from 'react';
 import axios from "axios"
-    import { BACKEND_URL } from "../config";
+import { BACKEND_URL } from "../config";
+
+
 export const Auth = ({type}:{type: "signup" | "signin"})=>{
     const navigate = useNavigate();
     const [postInputs, SetpostInputs ] = useState<SignupType>({
       
         name:"", 
-         email: "",
+        email: "",
         password: ""
        
     })
