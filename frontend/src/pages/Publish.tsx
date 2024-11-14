@@ -3,10 +3,12 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { completion } from "../hooks";
 
 export const Publish = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [loading, setloading] = useState(false);
   const navigate = useNavigate();
 
   const handlePublish = async () => {
@@ -36,6 +38,9 @@ export const Publish = () => {
     }
   };
 
+  const handlegpt =()=>{
+        
+  }
   return (
     <div>
       <Appbar />
@@ -49,7 +54,14 @@ export const Publish = () => {
             placeholder="Title"
             required
           />
-
+  <button
+            onClick={handlegpt}
+            type="button"
+            className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-400 mt-3"
+            disabled={loading}
+          >
+            {loading ? "Generating..." : "Generate Blog Content"}
+          </button>
           <div className="pt-5">
             <label id="message" className="block mb-2 font-semibold">Content</label>
             <textarea

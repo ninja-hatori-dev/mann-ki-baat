@@ -2,8 +2,16 @@ import { Appbar } from "../components/Appbar"
 import { Blogcard } from "../components/Blogcard";
 import { useMyblogs } from "../hooks"
 
+interface Blog {
+    id: string;
+    title: string;
+    content: string;
+    author: {
+        name: string;
+    };
+}
 export const Myaccount = () =>{
-    const {blogs,loading} = useMyblogs();
+    const {blogs  ,loading} = useMyblogs();
     if(loading){
         return <div className="flex justify-center items-center h-screen w-screen">
             <div role="status">
@@ -23,11 +31,11 @@ export const Myaccount = () =>{
 
             <div className="flex justify-center ">
             <div className="w-[60vw] cursor-pointer">
-                    {blogs.map( blog => 
+                    {blogs.map((blog: Blog) => 
                         <Blogcard
                         id={blog.id}
-                       
-                        authorName={blog.author.name || "Anonymous"}
+                        authorId={blog.authorId}
+                        authorName={blog.author.name }
                         title={blog.title}
                         content={blog.content}
                         publishedDate="Nov 6, 2024"

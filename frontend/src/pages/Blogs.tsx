@@ -26,7 +26,7 @@ export const Blogs = () =>{
                     {blogs.map( blog => 
                         <Blogcard
                         id={blog.id}
-                       
+                        authorId={blog.authorId}
                         authorName={blog.author.name || "Anonymous"}
                         title={blog.title}
                         content={blog.content}

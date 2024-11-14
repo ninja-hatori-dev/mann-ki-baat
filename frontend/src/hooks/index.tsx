@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../config";
+import {  BACKEND_URL } from "../config";
 
 
 
@@ -91,7 +91,7 @@ export function useUserDetails(token: any): any {
 			})
 			.join("")
 	);
-    console.log(jsonPayload);
+  
 	return JSON.parse(jsonPayload);
 }
 
@@ -124,3 +124,23 @@ export const useMyblogs = () =>{
         blogs,
     };
 };
+
+
+// import OpenAI from "openai";
+
+// const openai = new OpenAI({
+//     apiKey: "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" 
+// ,dangerouslyAllowBrowser: true 
+// });
+
+// export const completion = await openai.chat.completions.create({
+//     model: "gpt-4o-mini",
+//     messages: [
+//         { role: "system", content: "You are a helpful assistant." },
+//         {
+//             role: "user",
+//             content: "Write a haiku about recursion in programming.",
+//         },
+//     ],
+// });
+// console.log(completion.choices[0].message);

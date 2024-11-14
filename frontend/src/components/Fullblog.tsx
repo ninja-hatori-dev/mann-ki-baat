@@ -4,7 +4,7 @@ import { Blog } from "../hooks"
 
    
 export const Fullblog = ({ blog }:{ blog : Blog}) => {
-    console.log("yeh hai full body",blog);
+   
     return (
       <div>
           <div>
