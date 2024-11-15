@@ -55,7 +55,7 @@ export const Publish = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       // Generate content with Google Gemini API
-      const result = await model.generateContent(`Write a detailed blog post about the following topic: ${title}`);
+      const result = await model.generateContent(`Write a article (without giving the topic name in response) the following topic: ${title}`);
       const gptContent = await result.response.text();
 
       setContent(gptContent.trim()); // Set the generated content into the content box
@@ -82,7 +82,7 @@ export const Publish = () => {
       messages: [
         {
           role: "user",
-          content: `Write a detailed blog post about the following topic: ${title}`,
+          content: `Write a article about the following topic: ${title}`,
         },
       ],
       stream: false,
@@ -151,6 +151,7 @@ export const Publish = () => {
           >
             {loading ? "Generating..." : "@Generate Content through AI"}
           </button>
+          
 
 
           <div className="pt-5">

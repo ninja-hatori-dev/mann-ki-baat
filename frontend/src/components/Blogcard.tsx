@@ -93,7 +93,7 @@ export function Avatar({ name, size = "small" }: { name: string; size: "small" |
             }`}
         >
             <span className={`${size === "small" ? "text-sm" : "text-md"} font-small text-slate-100`}>
-                {name[0]}
+                {name[0].toUpperCase()}
             </span>
         </div>
     );
